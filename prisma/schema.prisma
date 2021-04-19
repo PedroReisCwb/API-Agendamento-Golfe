@@ -1,0 +1,154 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["microsoftSqlServer"]
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model AGENDAMENTO_AGENDA_PERIODO {
+  id                       Int                        @id @default(autoincrement())
+  descricao                String                     @db.VarChar(100)
+  data_inicio              DateTime                   @db.DateTime
+  data_fim                 DateTime                   @db.DateTime
+  data_hora_liberacao      DateTime                   @db.DateTime
+  status                   String                     @db.VarChar(1)
+  dt_status                DateTime                   @default(now()) @db.DateTime
+  id_agendamento_situacao  Int?
+  AGENDAMENTO_SITUACAO     AGENDAMENTO_SITUACAO?      @relation(fields: [id_agendamento_situacao], references: [id])
+  AGENDAMENTO_CONFIGURACAO AGENDAMENTO_CONFIGURACAO[]
+  AGENDAMENTO_HISTORICO    AGENDAMENTO_HISTORICO[]
+  AGENDAMENTO_HORARIO      AGENDAMENTO_HORARIO[]
+  AGENDAMENTO_RESTRICAO    AGENDAMENTO_RESTRICAO[]
+}
+
+model AGENDAMENTO_BURACO {
+  id                       Int                        @id @default(autoincrement())
+  numero_buraco            Int                        @db.TinyInt
+  descricao                String                     @db.VarChar(100)
+  status                   String                     @db.VarChar(1)
+  dt_status                DateTime                   @default(now()) @db.DateTime
+  id_agendamento_situacao  Int?
+  AGENDAMENTO_SITUACAO     AGENDAMENTO_SITUACAO?      @relation(fields: [id_agendamento_situacao], references: [id])
+  AGENDAMENTO_CONFIGURACAO AGENDAMENTO_CONFIGURACAO[]
+  AGENDAMENTO_HISTORICO    AGENDAMENTO_HISTORICO[]
+}
+
+model AGENDAMENTO_CONFIGURACAO {
+  id                         Int                         @id @default(autoincrement())
+  status                     String                      @db.VarChar(1)
+  dt_status                  DateTime                    @default(now()) @db.DateTime
+  id_agendamento_agenda      Int?
+  id_agendamento_buraco      Int?
+  id_agendamento_equipe      Int?
+  id_agendamento_horario     Int?
+  AGENDAMENTO_AGENDA_PERIODO AGENDAMENTO_AGENDA_PERIODO? @relation(fields: [id_agendamento_agenda], references: [id])
+  AGENDAMENTO_BURACO         AGENDAMENTO_BURACO?         @relation(fields: [id_agendamento_buraco], references: [id])
+  AGENDAMENTO_EQUIPE         AGENDAMENTO_EQUIPE?         @relation(fields: [id_agendamento_equipe], references: [id])
+  AGENDAMENTO_HORARIO        AGENDAMENTO_HORARIO?        @relation(fields: [id_agendamento_horario], references: [id])
+}
+
+model AGENDAMENTO_CONVIDADO {
+  id                       Int                    @id @default(autoincrement())
+  nome                     String                 @db.VarChar(100)
+  status                   String                 @db.VarChar(1)
+  dt_status                DateTime               @default(now()) @db.DateTime
+  id_agendamento_historico Int?
+  AGENDAMENTO_HISTORICO    AGENDAMENTO_HISTORICO? @relation(fields: [id_agendamento_historico], references: [id])
+}
+
+model AGENDAMENTO_EQUIPE {
+  id                       Int                        @id @default(autoincrement())
+  limite_qtde              Int                        @db.TinyInt
+  descricao                String                     @db.VarChar(100)
+  status                   String                     @db.VarChar(1)
+  dt_status                DateTime                   @default(now()) @db.DateTime
+  id_agendamento_situacao  Int?
+  AGENDAMENTO_SITUACAO     AGENDAMENTO_SITUACAO?      @relation(fields: [id_agendamento_situacao], references: [id])
+  AGENDAMENTO_CONFIGURACAO AGENDAMENTO_CONFIGURACAO[]
+  AGENDAMENTO_HISTORICO    AGENDAMENTO_HISTORICO[]
+}
+
+model AGENDAMENTO_HISTORICO {
+  id                         Int                         @id @default(autoincrement())
+  data_reserva               DateTime                    @db.DateTime
+  data_registro              DateTime                    @db.DateTime
+  data_acesso                DateTime                    @db.DateTime
+  status                     String                      @db.VarChar(1)
+  dt_status                  DateTime                    @default(now()) @db.DateTime
+  id_agendamento_historico   Int
+  id_agendamento_jogador     Int?
+  id_agendamento_agenda      Int?
+  id_agendamento_buraco      Int?
+  id_agendamento_equipe      Int?
+  id_agendamento_horario     Int?
+  AGENDAMENTO_AGENDA_PERIODO AGENDAMENTO_AGENDA_PERIODO? @relation(fields: [id_agendamento_agenda], references: [id])
+  AGENDAMENTO_BURACO         AGENDAMENTO_BURACO?         @relation(fields: [id_agendamento_buraco], references: [id])
+  AGENDAMENTO_EQUIPE         AGENDAMENTO_EQUIPE?         @relation(fields: [id_agendamento_equipe], references: [id])
+  AGENDAMENTO_HORARIO        AGENDAMENTO_HORARIO?        @relation(fields: [id_agendamento_horario], references: [id])
+  AGENDAMENTO_JOGADOR        AGENDAMENTO_JOGADOR?        @relation(fields: [id_agendamento_jogador], references: [id])
+  AGENDAMENTO_CONVIDADO      AGENDAMENTO_CONVIDADO[]
+}
+
+model AGENDAMENTO_HORARIO {
+  id                         Int                         @id @default(autoincrement())
+  horario                    String                      @db.VarChar(100)
+  status                     String                      @db.VarChar(1)
+  dt_status                  DateTime                    @default(now()) @db.DateTime
+  id_agendamento_situacao    Int?
+  id_agendamento_agenda      Int?
+  AGENDAMENTO_AGENDA_PERIODO AGENDAMENTO_AGENDA_PERIODO? @relation(fields: [id_agendamento_agenda], references: [id])
+  AGENDAMENTO_SITUACAO       AGENDAMENTO_SITUACAO?       @relation(fields: [id_agendamento_situacao], references: [id])
+  AGENDAMENTO_CONFIGURACAO   AGENDAMENTO_CONFIGURACAO[]
+  AGENDAMENTO_HISTORICO      AGENDAMENTO_HISTORICO[]
+}
+
+model AGENDAMENTO_JOGADOR {
+  id                      Int                     @id @default(autoincrement())
+  geracao                 Int                     @db.TinyInt
+  categoria               String                  @db.VarChar(1)
+  matricula               String                  @db.VarChar(255)
+  num_dep                 Int                     @db.TinyInt
+  status                  String                  @db.VarChar(1)
+  dt_status               DateTime                @default(now()) @db.DateTime
+  id_agendamento_situacao Int?
+  AGENDAMENTO_SITUACAO    AGENDAMENTO_SITUACAO?   @relation(fields: [id_agendamento_situacao], references: [id])
+  AGENDAMENTO_HISTORICO   AGENDAMENTO_HISTORICO[]
+}
+
+model AGENDAMENTO_RESTRICAO {
+  id                         Int                         @id @default(autoincrement())
+  data_inicio                DateTime                    @db.DateTime
+  data_fim                   DateTime                    @db.DateTime
+  msg_resumida               String                      @db.VarChar(50)
+  msg_detalhada              String                      @db.VarChar(300)
+  bloquear                   String                      @db.VarChar(1)
+  status                     String                      @db.VarChar(1)
+  dt_status                  DateTime                    @default(now()) @db.DateTime
+  id_agendamento_situacao    Int?
+  id_agendamento_agenda      Int?
+  AGENDAMENTO_AGENDA_PERIODO AGENDAMENTO_AGENDA_PERIODO? @relation(fields: [id_agendamento_agenda], references: [id])
+  AGENDAMENTO_SITUACAO       AGENDAMENTO_SITUACAO?       @relation(fields: [id_agendamento_situacao], references: [id])
+}
+
+model AGENDAMENTO_SITUACAO {
+  id                         Int                          @id @default(autoincrement())
+  descricao                  String                       @db.VarChar(100)
+  status                     String                       @db.VarChar(1)
+  dt_status                  DateTime                     @default(now()) @db.DateTime
+  AGENDAMENTO_AGENDA_PERIODO AGENDAMENTO_AGENDA_PERIODO[]
+  AGENDAMENTO_BURACO         AGENDAMENTO_BURACO[]
+  AGENDAMENTO_EQUIPE         AGENDAMENTO_EQUIPE[]
+  AGENDAMENTO_HORARIO        AGENDAMENTO_HORARIO[]
+  AGENDAMENTO_JOGADOR        AGENDAMENTO_JOGADOR[]
+  AGENDAMENTO_RESTRICAO      AGENDAMENTO_RESTRICAO[]
+}
+
+model AGENDAMENTO_USUARIO {
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now()) @db.DateTime
+  nome    String   @unique @db.VarChar(100)
+  senha   String   @db.VarChar(255)
+}
