@@ -26,6 +26,7 @@ export class JogadorService {
           status,
           dt_status,
           id_agendamento_situacao,
+          nome,
         },
       ) {
         return this.prismaService.aGENDAMENTO_JOGADOR.create({
@@ -37,6 +38,7 @@ export class JogadorService {
             status,
             dt_status,
             id_agendamento_situacao,
+            nome,
           },
         });
       }

@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ConfiguracaoService } from './configuracao.service';
 
 @Controller('configuracao')
@@ -10,11 +11,21 @@ export class ConfiguracaoController {
     return this.configuracaoService.findAll();
   }
 
-  @Get('agenda')
-  findHistoryDay() {
-    return this.configuracaoService.buscarAgendas();
+  /*@Get('agenda/:equipe/:dia/:id')
+  buscarAgendas(@Param('equipe') equipe: string, @Param('dia') dia: string, @Param('id') id: number) {
+    return this.configuracaoService.buscarAgendas(equipe, dia, id);
+  }*/
+
+  @Get('agenda/horarios/:equipe/:dia/:id')
+  buscarHorariosAgenda(@Param('equipe') equipe: string, @Param('dia') dia: string, @Param('id') id: number) {
+    return this.configuracaoService.buscarHorariosAgenda(equipe, dia, id);
   }
 
+  @Get('agenda/:equipe/:dia')
+  buscarAgenda(@Param('equipe') equipe: string, @Param('dia') dia: string) {​​​​​​​​​
+    return this.configuracaoService.buscarAgenda(equipe, dia);
+  }
+ 
   @Post()
   create(@Body() data) {
     return this.configuracaoService.create(data);

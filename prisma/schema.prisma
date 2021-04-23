@@ -109,8 +109,9 @@ model AGENDAMENTO_JOGADOR {
   id                      Int                     @id @default(autoincrement())
   geracao                 Int                     @db.TinyInt
   categoria               String                  @db.VarChar(1)
-  matricula               String                  @db.VarChar(255)
+  matricula               String                  @db.VarChar(5)
   num_dep                 Int                     @db.TinyInt
+  nome                    String                  @db.VarChar(255)
   status                  String                  @db.VarChar(1)
   dt_status               DateTime                @default(now()) @db.DateTime
   id_agendamento_situacao Int?
