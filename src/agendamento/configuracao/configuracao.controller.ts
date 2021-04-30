@@ -16,16 +16,21 @@ export class ConfiguracaoController {
     return this.configuracaoService.buscarAgendas(equipe, dia, id);
   }*/
 
-  @Get('agenda/horarios/:equipe/:dia/:id')
+  @Get('agenda/:equipe/:dia/:id')
   buscarHorariosAgenda(@Param('equipe') equipe: string, @Param('dia') dia: string, @Param('id') id: number) {
     return this.configuracaoService.buscarHorariosAgenda(equipe, dia, id);
   }
 
-  @Get('agenda/:equipe/:dia')
+  @Get('agenda/:dia/:id')
+  buscarHorariosAgendaTotal(@Param('dia') dia: string, @Param('id') id: number) {
+    return this.configuracaoService.buscarHorariosAgendaTotal(dia, id);
+  }
+
+  /*@Get('agenda/:equipe/:dia')
   buscarAgenda(@Param('equipe') equipe: string, @Param('dia') dia: string) {​​​​​​​​​
     return this.configuracaoService.buscarAgenda(equipe, dia);
-  }
- 
+  }*/
+
   @Post()
   create(@Body() data) {
     return this.configuracaoService.create(data);
